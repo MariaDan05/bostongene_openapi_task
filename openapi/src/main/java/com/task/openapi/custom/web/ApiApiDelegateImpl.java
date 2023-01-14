@@ -20,15 +20,16 @@ public class ApiApiDelegateImpl implements ApiApiDelegate {
 
     @Override
     public ResponseEntity<CreatedResponse> apiDrugsPost(DrugCreateRequest drugCreateRequest) {
-        if(RequestValidator.isValidDrugCreateRequest(drugCreateRequest)) {
-            Drug newDrug = new Drug(drugCreateRequest.getName(), drugCreateRequest.getNationalDrugCode(),
-                    drugCreateRequest.getDescription());
-            this.drugRepository.save(newDrug);
-
-            return new ResponseEntity<>(new CreatedResponse().message(String.format("Drug %s Created Successfully",
-                                                                     drugCreateRequest.getName())), HttpStatus.CREATED);
+        if(!RequestValidator.isValidDrugCreateRequest(drugCreateRequest)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Drug newDrug = new Drug(drugCreateRequest.getName(), drugCreateRequest.getNationalDrugCode(),
+                drugCreateRequest.getDescription());
+        this.drugRepository.save(newDrug);
+
+        return new ResponseEntity<>(new CreatedResponse().message(String.format("Drug %s Created Successfully",
+                drugCreateRequest.getName())), HttpStatus.CREATED);
     }
 
     @Override
