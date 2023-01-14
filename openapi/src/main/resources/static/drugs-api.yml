@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  title: "Open API specification for testing"
+  version: snapshot
+paths:
+  /api/drugs:
+    post:
+      tags:
+        - drug
+      requestBody:
+        description: Create a new drug in the system
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DrugCreateRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponse'
+
+  /api/drugs/{drugId}:
+    get:
+      tags:
+        - drug
+      parameters:
+        - in: path
+          name: drugId
+          required: true
+          description: Identification of entity record.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DrugResponse'
+
+components:
+  schemas:
+    DrugCreateRequest:
+      type: object
+      required:
+        - name
+        - nationalDrugCode
+        - description
+      properties:
+        name:
+          type: string
+        nationalDrugCode:
+          type: integer
+          format: int32
+        description:
+          type: string
+
+    DrugResponse:
+      type: object
+      required:
+        - drugId
+        - name
+        - nationalDrugCode
+        - description
+      properties:
+        drugId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        nationalDrugCode:
+          type: integer
+          format: int32
+        description:
+          type: string
+
+    CreatedResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string

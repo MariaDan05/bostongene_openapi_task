@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: Open API specification for testing
+  version: snapshot
+servers:
+- url: /
+paths:
+  /api/drugs:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DrugCreateRequest'
+        description: Create a new drug in the system
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponse'
+          description: Successful operation
+      tags:
+      - drug
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: drug
+  /api/drugs/{drugId}:
+    get:
+      parameters:
+      - description: Identification of entity record.
+        explode: false
+        in: path
+        name: drugId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DrugResponse'
+          description: Successful operation
+      tags:
+      - drug
+      x-accepts: application/json
+      x-tags:
+      - tag: drug
+components:
+  schemas:
+    DrugCreateRequest:
+      example:
+        name: name
+        description: description
+        nationalDrugCode: 0
+      properties:
+        name:
+          type: string
+        nationalDrugCode:
+          format: int32
+          type: integer
+        description:
+          type: string
+      required:
+      - description
+      - name
+      - nationalDrugCode
+      type: object
+    DrugResponse:
+      example:
+        name: name
+        description: description
+        drugId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        nationalDrugCode: 0
+      properties:
+        drugId:
+          format: uuid
+          type: string
+        name:
+          type: string
+        nationalDrugCode:
+          format: int32
+          type: integer
+        description:
+          type: string
+      required:
+      - description
+      - drugId
+      - name
+      - nationalDrugCode
+      type: object
+    CreatedResponse:
+      example:
+        message: message
+      properties:
+        message:
+          type: string
+      required:
+      - message
+      type: object
